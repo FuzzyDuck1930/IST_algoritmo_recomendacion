@@ -12,17 +12,8 @@ constructor(){
 
 async connectedCallback(){
     const allData = await getDataNeko();
-    //const allDataRick = await getDataRick();
-    this.mount(allData);
-}
-
-mount(allData?:any){
-    this.render(allData);
-    const myButton = this.shadowRoot?.querySelector('button');
-        myButton?.addEventListener('click', async () => {
-        const allDataRick = await getDataRick();
-        this.render(allDataRick);
-    })
+    const allDataRick = await getDataRick();
+    this.render(allData, allDataRick);
 }
 
 render(allData?: any, allDataRick?:any){
@@ -38,16 +29,32 @@ render(allData?: any, allDataRick?:any){
 
         const bringRick = this.ownerDocument.createElement("button")
         bringRick.innerText = "Dame info de Rick & Morty";
-        this.shadowRoot?.appendChild(bringRick)
+        this.shadowRoot?.appendChild(bringRick);
 
+        let rickCards: HTMLElement[] = [];
+
+        bringRick.addEventListener("click",() => {
+            console.log("click")
         allDataRick.forEach((elements: typeNeko) => {
             const card = this.ownerDocument.createElement("app-card");
             card.setAttribute(AttributeCard.image, elements.image);
             card.setAttribute(AttributeCard.name, elements.name);
             card.setAttribute(AttributeCard.species, elements.species);
             card.setAttribute(AttributeCard.status, elements.status);
+            rickCards.push(card);
             this.shadowRoot?.appendChild(card);
         });
+            })
+            const byeRick = this.ownerDocument.createElement("button")
+            byeRick.innerText = "Dejame solo los bailecitos";
+            this.shadowRoot?.appendChild(byeRick);
+
+            byeRick.addEventListener("click",() => {
+                rickCards.forEach((card) => {
+                    this.shadowRoot?.removeChild(card);
+                });
+                rickCards = [];
+    })
     }
 }
 }
